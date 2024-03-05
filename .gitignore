@@ -1,0 +1,4 @@
+.vscode
+myftp
+*.o
+*.sh
