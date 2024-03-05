@@ -21,16 +21,19 @@ int run_ftp_server(int connfd)
 {
     char buff[1024];
     char to_send[] = "Hello World !\n";
-    int n;
 
     bzero(buff, 1024);
-    write(connfd, to_send, strlen(to_send));
+    read(connfd, buff, sizeof(buff));
+    printf("From client: %s", buff);
+    write(connfd, to_send, sizeof(to_send));
+    printf("To client: %s", to_send);
+    return 0;
 }
 
-int new_connection(ftp_client_node **head_client, int sockdf, struct sockaddr_in servaddr)
+int new_connection(ftp_client_node **head_client, int sockdf)
 {
-    int connfd;
-    int len;
+    int connfd = 0;
+    socklen_t len;
     struct sockaddr_in cli;
 
     len = sizeof(cli);
@@ -46,9 +49,23 @@ int new_connection(ftp_client_node **head_client, int sockdf, struct sockaddr_in
 
 int main(int ac, char **av)
 {
+    (void)ac;
+    (void)av;
     ftp_server *server = create_server();
+    int sel_ret = 0;
+
     while (true) {
-        new_connection(&server->clients, server->sockfd, server->servaddr);
+        setup_readfds(server);
+        sel_ret = select(server->max_sd + 1, server->readfds, NULL, NULL, NULL);
+        if (sel_ret < 0) {
+            printf("Select failed...\n");
+            return 84;
+        }
+        if (FD_ISSET(server->sockfd, server->readfds))
+            new_connection(&server->clients, server->sockfd);
+        run_ftp_server(server->clients->connfd);
+        remove_client(&server->clients, server->clients->connfd);
+        printf("Client disconnected\n");
     }
     close(server->sockfd);
     return 0;

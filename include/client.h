@@ -12,7 +12,7 @@
 #include <unistd.h>
 
 #ifndef CLIENT_H_
-#define CLIENT_H_
+    #define CLIENT_H_
 
 typedef struct ftp_client_node_s {
     int connfd;

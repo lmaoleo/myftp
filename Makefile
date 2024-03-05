@@ -8,6 +8,7 @@
 NAME = myftp
 
 SRC = myftp.c \
+		server.c \
 		client_utils/client.c \
 
 SRC := $(addprefix src/, $(SRC))
@@ -28,5 +29,8 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
+
+debug: CFLAGS += -g
+debug: re
 
 .PHONY: all clean fclean re

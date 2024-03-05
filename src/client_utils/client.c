@@ -43,6 +43,7 @@ void remove_client(ftp_client_node **head, int sockfd)
     ftp_client_node *temp = *head;
     ftp_client_node *prev = NULL;
 
+    close(sockfd);
     if (temp != NULL && temp->connfd == sockfd) {
         *head = temp->next;
         free(temp);
