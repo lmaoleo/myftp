@@ -2,3 +2,4 @@
 myftp
 *.o
 *.sh
+*.log

@@ -15,7 +15,7 @@
 #include "myftp.h"
 #include "server.h"
 
-static int make_sockfd()
+static int make_sockfd(void)
 {
     int sockdf;
 
@@ -40,14 +40,13 @@ static void make_servaddr(ftp_server *server)
     server->servaddr = servaddr;
 }
 
-static int bind_socket(int sockdf, struct sockaddr_in servaddr)
+static int bind_socket(int sockdf, struct sockaddr_in *servaddr)
 {
-    if ((bind(sockdf, (struct sockaddr *)&servaddr, sizeof(servaddr))) != 0) {
+    if ((bind(sockdf, (struct sockaddr *)servaddr, sizeof(*servaddr))) != 0) {
         printf("Socket bind failed...\n");
         return 84;
     } else
         printf("Socket successfully binded..\n");
-
     if ((listen(sockdf, 0)) != 0) {
         printf("Listen failed...\n");
         return 84;
@@ -75,14 +74,16 @@ void setup_readfds(ftp_server *server)
     server->max_sd = max_sock;
 }
 
-ftp_server *create_server()
+ftp_server *create_server(void)
 {
     ftp_server *server = malloc(sizeof(ftp_server));
 
+    if (server == NULL)
+        return NULL;
     server->sockfd = make_sockfd();
     make_servaddr(server);
     server->clients = NULL;
-    if (bind_socket(server->sockfd, server->servaddr) == 84)
+    if (bind_socket(server->sockfd, &server->servaddr) == 84)
         return NULL;
     return server;
 }

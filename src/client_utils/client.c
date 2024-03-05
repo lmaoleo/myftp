@@ -14,17 +14,17 @@
 #include "myftp.h"
 #include "client.h"
 
-ftp_client_node *init_client(int sockfd, struct sockaddr_in cli)
+ftp_client_node *init_client(int sockfd, struct sockaddr_in *cli)
 {
     ftp_client_node *client = malloc(sizeof(ftp_client_node));
 
     client->connfd = sockfd;
-    client->cli = cli;
+    client->cli = *cli;
     client->next = NULL;
     return client;
 }
 
-void add_client(ftp_client_node **head, int sockfd, struct sockaddr_in cli)
+void add_client(ftp_client_node **head, int sockfd, struct sockaddr_in *cli)
 {
     ftp_client_node *new_client = init_client(sockfd, cli);
     ftp_client_node *last = *head;

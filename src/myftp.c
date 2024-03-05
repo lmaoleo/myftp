@@ -43,30 +43,42 @@ int new_connection(ftp_client_node **head_client, int sockdf)
         return 84;
     } else
         printf("Server acccept the client...\n");
-    add_client(head_client, connfd, cli);
+    add_client(head_client, connfd, &cli);
     return connfd;
+}
+
+int server_loop(ftp_server *server)
+{
+    int sel_ret = 0;
+
+    setup_readfds(server);
+    sel_ret = select(server->max_sd + 1, server->readfds,
+    NULL, NULL, NULL);
+    if (sel_ret < 0) {
+        printf("Select failed...\n");
+        return 84;
+    }
+    if (FD_ISSET(server->sockfd, server->readfds))
+        new_connection(&server->clients, server->sockfd);
+    run_ftp_server(server->clients->connfd);
+    remove_client(&server->clients, server->clients->connfd);
+    printf("Client disconnected\n");
 }
 
 int main(int ac, char **av)
 {
+    ftp_server *server = create_server();
+    int ret = 0;
+
     (void)ac;
     (void)av;
-    ftp_server *server = create_server();
-    int sel_ret = 0;
-
+    if (server == NULL)
+        return 84;
     while (true) {
-        setup_readfds(server);
-        sel_ret = select(server->max_sd + 1, server->readfds, NULL, NULL, NULL);
-        if (sel_ret < 0) {
-            printf("Select failed...\n");
-            return 84;
-        }
-        if (FD_ISSET(server->sockfd, server->readfds))
-            new_connection(&server->clients, server->sockfd);
-        run_ftp_server(server->clients->connfd);
-        remove_client(&server->clients, server->clients->connfd);
-        printf("Client disconnected\n");
+        ret = server_loop(server);
+        if (ret != 0)
+            break;
     }
     close(server->sockfd);
-    return 0;
+    return ret;
 }

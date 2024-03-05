@@ -6,13 +6,13 @@
 */
 
 #ifndef SERVER_H_
-#define SERVER_H_
+    #define SERVER_H_
 
-#include <netinet/in.h>
-#include <sys/socket.h>
-#include <sys/select.h>
+    #include <netinet/in.h>
+    #include <sys/socket.h>
+    #include <sys/select.h>
 
-#include "client.h"
+    #include "client.h"
 
 typedef struct ftp_server_s {
     int sockfd;
@@ -22,7 +22,7 @@ typedef struct ftp_server_s {
     int max_sd;
 } ftp_server;
 
-ftp_server *create_server();
+ftp_server *create_server(void);
 void setup_readfds(ftp_server *server);
 
 #endif /* !SERVER_H_ */
