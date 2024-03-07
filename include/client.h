@@ -13,15 +13,19 @@
     #include <stdio.h>
     #include <string.h>
     #include <unistd.h>
+    #include <stdbool.h>
 
 typedef struct ftp_client_node_s {
     int connfd;
     struct sockaddr_in cli;
+    char *username;
+    bool is_logged;
     struct ftp_client_node_s *next;
-} ftp_client_node;
+} ftp_client_node_t;
 
-ftp_client_node *init_client(int sockfd, struct sockaddr_in *cli);
-void add_client(ftp_client_node **head, int sockfd, struct sockaddr_in *cli);
-void remove_client(ftp_client_node **head, int sockfd);
+ftp_client_node_t *init_client(int sockfd, struct sockaddr_in *cli);
+void add_client(ftp_client_node_t **head, int sockfd, struct sockaddr_in *cli);
+void remove_client(ftp_client_node_t **head, int sockfd);
+ftp_client_node_t *get_client(ftp_client_node_t *head, int sockfd);
 
 #endif /* !CLIENT_H_ */

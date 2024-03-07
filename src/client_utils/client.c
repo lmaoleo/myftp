@@ -14,20 +14,22 @@
 #include "myftp.h"
 #include "client.h"
 
-ftp_client_node *init_client(int sockfd, struct sockaddr_in *cli)
+ftp_client_node_t *init_client(int sockfd, struct sockaddr_in *cli)
 {
-    ftp_client_node *client = malloc(sizeof(ftp_client_node));
+    ftp_client_node_t *client = malloc(sizeof(ftp_client_node_t));
 
     client->connfd = sockfd;
     client->cli = *cli;
+    client->username = NULL;
+    client->is_logged = false;
     client->next = NULL;
     return client;
 }
 
-void add_client(ftp_client_node **head, int sockfd, struct sockaddr_in *cli)
+void add_client(ftp_client_node_t **head, int sockfd, struct sockaddr_in *cli)
 {
-    ftp_client_node *new_client = init_client(sockfd, cli);
-    ftp_client_node *last = *head;
+    ftp_client_node_t *new_client = init_client(sockfd, cli);
+    ftp_client_node_t *last = *head;
 
     if (*head == NULL) {
         *head = new_client;
@@ -38,10 +40,10 @@ void add_client(ftp_client_node **head, int sockfd, struct sockaddr_in *cli)
     last->next = new_client;
 }
 
-void remove_client(ftp_client_node **head, int sockfd)
+void remove_client(ftp_client_node_t **head, int sockfd)
 {
-    ftp_client_node *temp = *head;
-    ftp_client_node *prev = NULL;
+    ftp_client_node_t *temp = *head;
+    ftp_client_node_t *prev = NULL;
 
     close(sockfd);
     if (temp != NULL && temp->connfd == sockfd) {
@@ -56,5 +58,23 @@ void remove_client(ftp_client_node **head, int sockfd)
     if (temp == NULL)
         return;
     prev->next = temp->next;
-    free(temp);
+    free_client(temp);
+}
+
+ftp_client_node_t *get_client(ftp_client_node_t *head, int sockfd)
+{
+    ftp_client_node_t *current = head;
+
+    while (current != NULL) {
+        if (current->connfd == sockfd)
+            return current;
+        current = current->next;
+    }
+    return NULL;
+}
+
+void free_client(ftp_client_node_t *client)
+{
+    free(client->username);
+    free(client);
 }

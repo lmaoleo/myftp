@@ -29,13 +29,13 @@ static int make_sockfd(void)
     return sockdf;
 }
 
-static void make_servaddr(ftp_server *server)
+static void make_servaddr(ftp_server_t *server)
 {
     struct sockaddr_in servaddr;
 
     bzero(&servaddr, sizeof(servaddr));
     servaddr.sin_family = AF_INET;
-    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    servaddr.sin_addr.s_addr = INADDR_ANY;
     servaddr.sin_port = htons(PORT);
     server->servaddr = servaddr;
 }
@@ -55,28 +55,9 @@ static int bind_socket(int sockdf, struct sockaddr_in *servaddr)
     return 0;
 }
 
-void setup_readfds(ftp_server *server)
+ftp_server_t *create_server(void)
 {
-    fd_set *readfds = malloc(sizeof(fd_set));
-    int max_sock = 0;
-    int fd = 0;
-
-    FD_ZERO(readfds);
-    FD_SET(server->sockfd, readfds);
-    max_sock = server->sockfd;
-    for (ftp_client_node *tmp = server->clients; tmp; tmp = tmp->next) {
-        fd = tmp->connfd;
-        FD_SET(fd, readfds);
-        if (fd > max_sock)
-            max_sock = fd;
-    }
-    server->readfds = readfds;
-    server->max_sd = max_sock;
-}
-
-ftp_server *create_server(void)
-{
-    ftp_server *server = malloc(sizeof(ftp_server));
+    ftp_server_t *server = malloc(sizeof(ftp_server_t));
 
     if (server == NULL)
         return NULL;
@@ -86,4 +67,12 @@ ftp_server *create_server(void)
     if (bind_socket(server->sockfd, &server->servaddr) == 84)
         return NULL;
     return server;
+}
+
+void free_server(ftp_server_t *server)
+{
+    close(server->sockfd);
+    remove_all_clients(&server->clients);
+    free(server->readfds);
+    free(server);
 }

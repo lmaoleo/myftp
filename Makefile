@@ -9,7 +9,14 @@ NAME = myftp
 
 SRC = myftp.c \
 		server.c \
+		file_descrptors.c \
+		server_logic.c \
 		client_utils/client.c \
+		utils/regex_util.c \
+		utils/com_utils.c \
+		commands/commands.c \
+		commands/normal_commands.c \
+		commands/user.c \
 
 SRC := $(addprefix src/, $(SRC))
 
