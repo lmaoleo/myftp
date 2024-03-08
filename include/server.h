@@ -22,11 +22,13 @@ typedef struct ftp_server_s {
     int max_sd;
 } ftp_server_t;
 
-ftp_server_t *create_server(void);
+ftp_server_t *create_server(int port);
 void setup_readfds(ftp_server_t *server);
 void free_server(ftp_server_t *server);
 
 int server_clients_loop(ftp_server_t *server,
     ftp_client_node_t *new_client, char *buff);
+
+int run_ftp_server(ftp_client_node_t *client, char *buff);
 
 #endif /* !SERVER_H_ */

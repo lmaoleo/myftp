@@ -20,7 +20,7 @@ int user_cmd(ftp_client_node_t *client, regex_result_t *res)
     char *username = get_arg(res, 1);
 
     if (username == NULL) {
-        ftp_send(client->connfd, NEED_ACCOUNT);
+        ftp_send(client->connfd, INVALID_CREDENTIALS);
         return 1;
     }
     for (int i = 0; avaliable_users[i].username != NULL; i++) {
@@ -30,19 +30,19 @@ int user_cmd(ftp_client_node_t *client, regex_result_t *res)
             return 0;
         }
     }
-    ftp_send(client->connfd, NEED_ACCOUNT);
+    ftp_send(client->connfd, INVALID_CREDENTIALS);
     return 0;
 }
 
 int pass_cmd(ftp_client_node_t *client, regex_result_t *res)
 {
     char *password = get_arg(res, 1);
+
     if (client->username == NULL) {
         ftp_send(client->connfd, NEED_ACCOUNT);
         return 1;
     }
-    if (password == NULL)
-        password = strdup("");
+    password = (password == NULL) ? strdup("") : password;
     for (int i = 0; avaliable_users[i].username != NULL; i++) {
         if (strcmp(avaliable_users[i].username, client->username) != 0)
             continue;

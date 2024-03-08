@@ -9,6 +9,7 @@
 
 int quit_cmd(ftp_client_node_t *client, regex_result_t *res)
 {
-    ftp_send(client->connfd, NOT_LOGGED);
+    (void)res;
+    ftp_send(client->connfd, SERVICE_CLOSING);
     return 1;
 }

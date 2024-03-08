@@ -12,6 +12,7 @@ SRC = myftp.c \
 		file_descrptors.c \
 		server_logic.c \
 		client_utils/client.c \
+		client_utils/client_free.c \
 		utils/regex_util.c \
 		utils/com_utils.c \
 		commands/commands.c \

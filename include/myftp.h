@@ -8,6 +8,4 @@
 #ifndef MY_FTP_H_
     #define MY_FTP_H_
 
-    #define PORT 6666
-
 #endif /* !MY_FTP_H_ */

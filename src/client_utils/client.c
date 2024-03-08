@@ -61,6 +61,19 @@ void remove_client(ftp_client_node_t **head, int sockfd)
     free_client(temp);
 }
 
+void remove_all_clients(ftp_client_node_t **head)
+{
+    ftp_client_node_t *current = *head;
+    ftp_client_node_t *next = NULL;
+
+    while (current != NULL) {
+        next = current->next;
+        free_client(current);
+        current = next;
+    }
+    *head = NULL;
+}
+
 ftp_client_node_t *get_client(ftp_client_node_t *head, int sockfd)
 {
     ftp_client_node_t *current = head;
@@ -71,10 +84,4 @@ ftp_client_node_t *get_client(ftp_client_node_t *head, int sockfd)
         current = current->next;
     }
     return NULL;
-}
-
-void free_client(ftp_client_node_t *client)
-{
-    free(client->username);
-    free(client);
 }

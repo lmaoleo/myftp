@@ -10,6 +10,25 @@
 #include "commands.h"
 #include "user.h"
 
+ftp_client_node_t *new_connection(ftp_client_node_t **head_client, int sockdf)
+{
+    int connfd = 0;
+    socklen_t len;
+    struct sockaddr_in cli;
+    ftp_client_node_t *new_client = NULL;
+
+    len = sizeof(cli);
+    connfd = accept(sockdf, (struct sockaddr *)&cli, &len);
+    if (connfd < 0) {
+        printf("Server acccept failed...\n");
+        return NULL;
+    } else
+        printf("Server acccept the client...\n");
+    add_client(head_client, connfd, &cli);
+    new_client = get_client(*head_client, connfd);
+    return new_client;
+}
+
 int server_clients_loop(ftp_server_t *server,
     ftp_client_node_t *new_client, char *buff)
 {

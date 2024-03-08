@@ -31,25 +31,6 @@ int run_ftp_server(ftp_client_node_t *client, char *buff)
     return -1;
 }
 
-ftp_client_node_t *new_connection(ftp_client_node_t **head_client, int sockdf)
-{
-    int connfd = 0;
-    socklen_t len;
-    struct sockaddr_in cli;
-    ftp_client_node_t *new_client = NULL;
-
-    len = sizeof(cli);
-    connfd = accept(sockdf, (struct sockaddr *)&cli, &len);
-    if (connfd < 0) {
-        printf("Server acccept failed...\n");
-        return NULL;
-    } else
-        printf("Server acccept the client...\n");
-    add_client(head_client, connfd, &cli);
-    new_client = get_client(*head_client, connfd);
-    return new_client;
-}
-
 int server_loop(ftp_server_t *server)
 {
     char buff[1024];
@@ -62,18 +43,24 @@ int server_loop(ftp_server_t *server)
         printf("Select failed...\n");
         return 84;
     }
-    ret = server_client_loop(server, new_client, buff);
-    if (ret >= 0)
+    ret = server_clients_loop(server, new_client, buff);
+    if (ret < 0)
         return ret;
     return -1;
 }
 
 int main(int ac, char **av)
 {
-    ftp_server_t *server = create_server();
+    ftp_server_t *server = NULL;
     int ret = 0;
-    int port;
+    int port = 0;
 
+    if (ac != 2)
+        return 84;
+    port = atoi(av[1]);
+    if (port < 1024 || port > 65535)
+        return 84;
+    server = create_server(port);
     if (server == NULL)
         return 84;
     while (true) {

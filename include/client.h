@@ -26,6 +26,8 @@ typedef struct ftp_client_node_s {
 ftp_client_node_t *init_client(int sockfd, struct sockaddr_in *cli);
 void add_client(ftp_client_node_t **head, int sockfd, struct sockaddr_in *cli);
 void remove_client(ftp_client_node_t **head, int sockfd);
+void remove_all_clients(ftp_client_node_t **head);
+void free_client(ftp_client_node_t *client);
 ftp_client_node_t *get_client(ftp_client_node_t *head, int sockfd);
 
 #endif /* !CLIENT_H_ */

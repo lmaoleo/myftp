@@ -29,14 +29,14 @@ static int make_sockfd(void)
     return sockdf;
 }
 
-static void make_servaddr(ftp_server_t *server)
+static void make_servaddr(ftp_server_t *server, int port)
 {
     struct sockaddr_in servaddr;
 
     bzero(&servaddr, sizeof(servaddr));
     servaddr.sin_family = AF_INET;
     servaddr.sin_addr.s_addr = INADDR_ANY;
-    servaddr.sin_port = htons(PORT);
+    servaddr.sin_port = htons(port);
     server->servaddr = servaddr;
 }
 
@@ -55,14 +55,14 @@ static int bind_socket(int sockdf, struct sockaddr_in *servaddr)
     return 0;
 }
 
-ftp_server_t *create_server(void)
+ftp_server_t *create_server(int port)
 {
     ftp_server_t *server = malloc(sizeof(ftp_server_t));
 
     if (server == NULL)
         return NULL;
     server->sockfd = make_sockfd();
-    make_servaddr(server);
+    make_servaddr(server, port);
     server->clients = NULL;
     if (bind_socket(server->sockfd, &server->servaddr) == 84)
         return NULL;

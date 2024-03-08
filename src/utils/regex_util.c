@@ -7,6 +7,7 @@
 
 #include <unistd.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 #include "regex_util.h"
 
@@ -28,7 +29,6 @@ static size_t calculate_nmatch(const char *pattern)
         if (*s == '(')
             ++nmatch;
     }
-
     return nmatch;
 }
 

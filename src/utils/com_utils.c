@@ -20,9 +20,9 @@ int ftp_send_buff(int fd, char *buff, char *msg)
 
 int ftp_send(int fd, char *msg)
 {
-    char *buff[1024];
+    char buff[1024];
 
-    ftp_send_buff(fd, buff, msg);
+    return ftp_send_buff(fd, buff, msg);
 }
 
 char *ftp_receive(int fd, char *buff)
