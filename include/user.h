@@ -15,6 +15,7 @@
 typedef struct user_s {
     char *username;
     char *password;
+    char *home;
 } user_t;
 
 int user_cmd(ftp_client_node_t *client, regex_result_t *res);

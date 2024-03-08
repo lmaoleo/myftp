@@ -20,6 +20,7 @@ typedef struct ftp_client_node_s {
     struct sockaddr_in cli;
     char *username;
     bool is_logged;
+    char *cwd;
     struct ftp_client_node_s *next;
 } ftp_client_node_t;
 

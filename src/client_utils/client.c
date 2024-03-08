@@ -22,6 +22,7 @@ ftp_client_node_t *init_client(int sockfd, struct sockaddr_in *cli)
     client->cli = *cli;
     client->username = NULL;
     client->is_logged = false;
+    client->cwd = NULL;
     client->next = NULL;
     return client;
 }

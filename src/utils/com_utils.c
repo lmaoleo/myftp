@@ -5,24 +5,24 @@
 ** com_utils
 */
 
-#include <strings.h>
-
 #include "utils.h"
 
-int ftp_send_buff(int fd, char *buff, char *msg)
+#include <strings.h>
+#include <stdarg.h>
+
+int ftp_send(int fd, char *buff, char *msg, ...)
 {
+    va_list args;
+    char other_buff[1024];
+    char new_msg[1024];
+
+    va_start(args, msg);
     if (buff == NULL)
-        return -1;
+        buff = other_buff;
     bzero(buff, 4 + strlen(msg) + 2);
-    sprintf(buff, "%s%s", msg, CRLF);
+    vsprintf(new_msg, msg, args);
+    sprintf(buff, "%s%s", new_msg, CRLF);
     return write(fd, buff, strlen(buff));
-}
-
-int ftp_send(int fd, char *msg)
-{
-    char buff[1024];
-
-    return ftp_send_buff(fd, buff, msg);
 }
 
 char *ftp_receive(int fd, char *buff)
@@ -32,9 +32,10 @@ char *ftp_receive(int fd, char *buff)
     if (buff == NULL)
         return NULL;
     bzero(buff, 1024);
+    if (fd == -1)
+        return NULL;
     ret = read(fd, buff, 1024);
     if (ret <= 0) {
-        free(buff);
         return NULL;
     }
     return buff;

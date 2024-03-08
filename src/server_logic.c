@@ -10,6 +10,9 @@
 #include "commands.h"
 #include "user.h"
 
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
 ftp_client_node_t *new_connection(ftp_client_node_t **head_client, int sockdf)
 {
     int connfd = 0;
@@ -23,7 +26,8 @@ ftp_client_node_t *new_connection(ftp_client_node_t **head_client, int sockdf)
         printf("Server acccept failed...\n");
         return NULL;
     } else
-        printf("Server acccept the client...\n");
+        printf("Connection from %s:%d\n", inet_ntoa(cli.sin_addr),
+        ntohs(cli.sin_port));
     add_client(head_client, connfd, &cli);
     new_client = get_client(*head_client, connfd);
     return new_client;
@@ -38,7 +42,7 @@ int server_clients_loop(ftp_server_t *server,
         new_client = new_connection(&server->clients, server->sockfd);
         if (new_client == NULL)
             return 84;
-        ftp_send_buff(new_client->connfd, buff, CONNECTED);
+        ftp_send(new_client->connfd, buff, CONNECTED);
     }
     for (ftp_client_node_t *client = server->clients; client != NULL;
     client = client->next) {

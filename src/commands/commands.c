@@ -13,6 +13,8 @@ const regex_cmd_t reg_cmds[] = {
     {"USER (\\w+)", &user_cmd},
     {"PASS ([!-~]*)", &pass_cmd},
     {"QUIT", &quit_cmd},
+    {"CWD ([!-~]+)", &cwd_cmd},
+    // {"CWD ([!-~]*)", &cwd_cmd},
     {NULL, NULL}
 };
 
@@ -28,7 +30,7 @@ int exec_cmd(ftp_client_node_t *client, char *cmd)
             return ret;
         }
     }
-    ftp_send(client->connfd, COMMAND_NOT_IMPLEMENTED);
+    ftp_send(client->connfd, NULL, COMMAND_NOT_IMPLEMENTED);
     return -1;
 }
 
