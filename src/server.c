@@ -59,6 +59,8 @@ ftp_server_t *create_server(int port, char *path)
 {
     ftp_server_t *server = malloc(sizeof(ftp_server_t));
 
+    if (port < 1024 || port > 65535)
+        return NULL;
     if (server == NULL)
         return NULL;
     server->sockfd = make_sockfd();

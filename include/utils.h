@@ -22,7 +22,7 @@
     #define HELP_2 "non-standard command.  "
     #define HELP_3 "This reply is useful only to the human user."
     #define HELP "214 Help message.\n" HELP_1 HELP_2 HELP_3
-    #define PATH_CREATED "257 %s created."
+    #define PATH_WD "257 \"%s\" created."
     #define LOGIN_SUCESS "230 User logged in, proceed."
     #define FILE_ACTION_OK "250 Requested file action okay, completed."
     #define USERNAME_OK "331 User name okay, need password."

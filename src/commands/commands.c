@@ -14,6 +14,7 @@ const regex_cmd_t reg_cmds[] = {
     {"PASS ([!-~]*)", &pass_cmd},
     {"QUIT", &quit_cmd},
     {"CWD ([!-~]+)", &cwd_cmd},
+    {"PWD", &pwd_cmd},
     {NULL, NULL}
 };
 

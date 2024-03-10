@@ -19,6 +19,17 @@
 #include "server.h"
 #include "utils.h"
 
+static void show_if_help(char *arg)
+{
+    if (strcmp(arg, "-help") != 0)
+        return;
+    printf("USAGE: ./myftp port path\n");
+    printf("\tport is the port number on which the server socket listens\n");
+    printf("\tpath is the path to the home directory ");
+    printf("for the Anonymous user\n");
+    exit(0);
+}
+
 int run_ftp_server(ftp_client_node_t *client, char *buff)
 {
     int ret = 0;
@@ -57,12 +68,11 @@ int main(int ac, char **av)
     int port = 0;
     char *path = NULL;
 
+    show_if_help(av[1]);
     if (ac != 3)
         return 84;
     port = atoi(av[1]);
     path = av[2];
-    if (port < 1024 || port > 65535)
-        return 84;
     server = create_server(port, path);
     if (server == NULL)
         return 84;
