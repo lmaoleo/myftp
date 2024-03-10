@@ -14,8 +14,8 @@
 #include "myftp.h"
 #include "client.h"
 
-ftp_client_node_t *init_client(int sockfd, struct sockaddr_in *cli,
-server_t *server)
+static ftp_client_node_t *init_client(int sockfd, struct sockaddr_in *cli,
+    server_t *server)
 {
     ftp_client_node_t *client = malloc(sizeof(ftp_client_node_t));
 
@@ -30,7 +30,7 @@ server_t *server)
 }
 
 void add_client(ftp_client_node_t **head, int sockfd, struct sockaddr_in *cli,
-server_t *server)
+    server_t *server)
 {
     ftp_client_node_t *new_client = init_client(sockfd, cli, server);
     ftp_client_node_t *last = *head;

@@ -13,7 +13,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-ftp_client_node_t *new_connection(ftp_client_node_t **head_client, int sockdf)
+static ftp_client_node_t *new_connection(ftp_client_node_t **head_client,
+    int sockdf, server_t *server)
 {
     int connfd = 0;
     socklen_t len;
@@ -28,7 +29,7 @@ ftp_client_node_t *new_connection(ftp_client_node_t **head_client, int sockdf)
     } else
         printf("Connection from %s:%d\n", inet_ntoa(cli.sin_addr),
         ntohs(cli.sin_port));
-    add_client(head_client, connfd, &cli, NULL);
+    add_client(head_client, connfd, &cli, server);
     new_client = get_client(*head_client, connfd);
     return new_client;
 }
@@ -39,7 +40,7 @@ int server_clients_loop(ftp_server_t *server,
     int ret = 0;
 
     if (FD_ISSET(server->sockfd, server->readfds)) {
-        new_client = new_connection(&server->clients, server->sockfd);
+        new_client = new_connection(&server->clients, server->sockfd, server);
         if (new_client == NULL)
             return 84;
         ftp_send(new_client->connfd, buff, CONNECTED);
