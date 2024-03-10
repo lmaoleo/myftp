@@ -28,7 +28,7 @@ ftp_client_node_t *new_connection(ftp_client_node_t **head_client, int sockdf)
     } else
         printf("Connection from %s:%d\n", inet_ntoa(cli.sin_addr),
         ntohs(cli.sin_port));
-    add_client(head_client, connfd, &cli);
+    add_client(head_client, connfd, &cli, NULL);
     new_client = get_client(*head_client, connfd);
     return new_client;
 }

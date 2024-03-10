@@ -11,7 +11,7 @@
 #include "user.h"
 
 const user_t avaliable_users[] = {
-    {"Anonymous", "", "/"},
+    {"Anonymous", "", NULL},
     {"admin", "admin", "/"},
     {NULL, NULL, NULL}
 };
@@ -19,7 +19,10 @@ const user_t avaliable_users[] = {
 static void set_user_info(ftp_client_node_t *client, const user_t *user)
 {
     client->is_logged = true;
-    client->cwd = strdup(user->home);
+    if (user->home == NULL)
+        client->cwd = strdup(client->conn_server->anonymous_path);
+    else
+        client->cwd = strdup(user->home);
 }
 
 int user_cmd(ftp_client_node_t *client, regex_result_t *res)

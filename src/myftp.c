@@ -55,13 +55,15 @@ int main(int ac, char **av)
     ftp_server_t *server = NULL;
     int ret = 0;
     int port = 0;
+    char *path = NULL;
 
-    if (ac != 2)
+    if (ac != 3)
         return 84;
     port = atoi(av[1]);
+    path = av[2];
     if (port < 1024 || port > 65535)
         return 84;
-    server = create_server(port);
+    server = create_server(port, path);
     if (server == NULL)
         return 84;
     while (true) {

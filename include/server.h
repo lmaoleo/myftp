@@ -19,10 +19,11 @@ typedef struct ftp_server_s {
     struct sockaddr_in servaddr;
     ftp_client_node_t *clients;
     fd_set *readfds;
+    char *anonymous_path;
     int max_sd;
 } ftp_server_t;
 
-ftp_server_t *create_server(int port);
+ftp_server_t *create_server(int port, char *path);
 void setup_readfds(ftp_server_t *server);
 void free_server(ftp_server_t *server);
 

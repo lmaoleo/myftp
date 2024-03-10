@@ -15,7 +15,10 @@
     #include <unistd.h>
     #include <stdbool.h>
 
+typedef struct ftp_server_s server_t;
+
 typedef struct ftp_client_node_s {
+    server_t *conn_server;
     int connfd;
     struct sockaddr_in cli;
     char *username;
@@ -24,8 +27,10 @@ typedef struct ftp_client_node_s {
     struct ftp_client_node_s *next;
 } ftp_client_node_t;
 
-ftp_client_node_t *init_client(int sockfd, struct sockaddr_in *cli);
-void add_client(ftp_client_node_t **head, int sockfd, struct sockaddr_in *cli);
+ftp_client_node_t *init_client(int sockfd, struct sockaddr_in *cli,
+server_t *server);
+void add_client(ftp_client_node_t **head, int sockfd,
+struct sockaddr_in *cli, server_t *server);
 void remove_client(ftp_client_node_t **head, int sockfd);
 void remove_all_clients(ftp_client_node_t **head);
 void free_client(ftp_client_node_t *client);

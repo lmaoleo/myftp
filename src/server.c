@@ -55,7 +55,7 @@ static int bind_socket(int sockdf, struct sockaddr_in *servaddr)
     return 0;
 }
 
-ftp_server_t *create_server(int port)
+ftp_server_t *create_server(int port, char *path)
 {
     ftp_server_t *server = malloc(sizeof(ftp_server_t));
 
@@ -66,6 +66,7 @@ ftp_server_t *create_server(int port)
     server->clients = NULL;
     if (bind_socket(server->sockfd, &server->servaddr) == 84)
         return NULL;
+    server->anonymous_path = strdup(path);
     return server;
 }
 
@@ -74,5 +75,6 @@ void free_server(ftp_server_t *server)
     close(server->sockfd);
     remove_all_clients(&server->clients);
     free(server->readfds);
+    free(server->anonymous_path);
     free(server);
 }

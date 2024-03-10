@@ -14,10 +14,12 @@
 #include "myftp.h"
 #include "client.h"
 
-ftp_client_node_t *init_client(int sockfd, struct sockaddr_in *cli)
+ftp_client_node_t *init_client(int sockfd, struct sockaddr_in *cli,
+server_t *server)
 {
     ftp_client_node_t *client = malloc(sizeof(ftp_client_node_t));
 
+    client->conn_server = server;
     client->connfd = sockfd;
     client->cli = *cli;
     client->username = NULL;
@@ -27,9 +29,10 @@ ftp_client_node_t *init_client(int sockfd, struct sockaddr_in *cli)
     return client;
 }
 
-void add_client(ftp_client_node_t **head, int sockfd, struct sockaddr_in *cli)
+void add_client(ftp_client_node_t **head, int sockfd, struct sockaddr_in *cli,
+server_t *server)
 {
-    ftp_client_node_t *new_client = init_client(sockfd, cli);
+    ftp_client_node_t *new_client = init_client(sockfd, cli, server);
     ftp_client_node_t *last = *head;
 
     if (*head == NULL) {
