@@ -10,6 +10,7 @@
 #include "user.h"
 
 const regex_cmd_t reg_cmds[] = {
+    {"HELP", &help_cmd},
     {"USER (\\w+)", &user_cmd},
     {"PASS ([!-~]*)", &pass_cmd},
     {"QUIT", &quit_cmd},

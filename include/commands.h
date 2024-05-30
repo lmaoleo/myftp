@@ -13,6 +13,7 @@
     #include "server.h"
     #include "utils.h"
 
+int help_cmd(ftp_client_node_t *client, regex_result_t *res);
 int quit_cmd(ftp_client_node_t *client, regex_result_t *res);
 int cwd_cmd(ftp_client_node_t *client, regex_result_t *res);
 int pwd_cmd(ftp_client_node_t *client, regex_result_t *res);

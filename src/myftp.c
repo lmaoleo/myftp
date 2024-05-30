@@ -21,6 +21,8 @@
 
 static void show_if_help(char *arg)
 {
+    if (arg == NULL)
+        return;
     if (strcmp(arg, "-help") != 0)
         return;
     printf("USAGE: ./myftp port path\n");
@@ -66,14 +68,14 @@ int main(int ac, char **av)
     ftp_server_t *server = NULL;
     int ret = 0;
     int port = 0;
-    char *path = NULL;
+    char path;
 
     show_if_help(av[1]);
     if (ac != 3)
         return 84;
     port = atoi(av[1]);
-    path = av[2];
-    server = create_server(port, path);
+    strcpy(&path, av[2]);
+    server = create_server(port, &path);
     if (server == NULL)
         return 84;
     while (true) {

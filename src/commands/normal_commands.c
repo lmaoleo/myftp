@@ -7,6 +7,13 @@
 
 #include "commands.h"
 
+int help_cmd(ftp_client_node_t *client, regex_result_t *res)
+{
+    (void)res;
+    ftp_send(client->connfd, NULL, HELP);
+    return 0;
+}
+
 int quit_cmd(ftp_client_node_t *client, regex_result_t *res)
 {
     (void)res;
