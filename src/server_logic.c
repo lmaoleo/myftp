@@ -47,9 +47,11 @@ int server_clients_loop(ftp_server_t *server,
     }
     for (ftp_client_node_t *client = server->clients; client != NULL;
     client = client->next) {
-        ret = run_ftp_server(client, buff);
-        if (ret == 0)
-            remove_client(&server->clients, client->connfd);
+        if (FD_ISSET(client->connfd, server->readfds)) {
+            ret = run_ftp_server(client, buff);
+            if (ret == 0)
+                remove_client(&server->clients, client->connfd);
+        }
     }
     return 0;
 }

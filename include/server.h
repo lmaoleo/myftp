@@ -24,7 +24,7 @@ typedef struct ftp_server_s {
 } ftp_server_t;
 
 ftp_server_t *create_server(int port, char *path);
-void setup_readfds(ftp_server_t *server);
+void setup_fds(ftp_server_t *server);
 void free_server(ftp_server_t *server);
 
 int server_clients_loop(ftp_server_t *server,

@@ -51,7 +51,7 @@ int server_loop(ftp_server_t *server)
     int ret = 0;
     ftp_client_node_t *new_client = NULL;
 
-    setup_readfds(server);
+    setup_fds(server);
     if (select(server->max_sd + 1, server->readfds,
     NULL, NULL, NULL) < 0) {
         printf("Select failed...\n");
