@@ -50,7 +50,7 @@ int pass_cmd(ftp_client_node_t *client, regex_result_t *res)
 
     if (client->username == NULL) {
         ftp_send(client->connfd, NULL, NEED_ACCOUNT);
-        return 1;
+        return 0;
     }
     password = (password == NULL) ? strdup("") : password;
     for (int i = 0; avaliable_users[i].username != NULL; i++) {

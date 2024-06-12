@@ -40,13 +40,10 @@ int run_ftp_server(ftp_client_node_t *client, char *buff)
     ftp_receive(client->connfd, buff);
     printf("Received: %s", buff);
     ret = exec_cmd(client, buff);
-    if (ret == 1) {
+    if (ret == 1)
         return 0;
-    }
-    if (ret == 0) {
-        printf("Client %d requested to quit\n", client->connfd);
+    if (ret == 0)
         return 1;
-    }
     return -1;
 }
 
