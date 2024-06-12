@@ -17,6 +17,7 @@ int help_cmd(ftp_client_node_t *client, regex_result_t *res)
 int quit_cmd(ftp_client_node_t *client, regex_result_t *res)
 {
     (void)res;
+    printf("Client %d requested to quit\n", client->connfd);
     ftp_send(client->connfd, NULL, SERVICE_CLOSING);
     return 1;
 }

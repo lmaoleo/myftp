@@ -34,11 +34,18 @@ static ftp_client_node_t *new_connection(ftp_client_node_t **head_client,
     return new_client;
 }
 
+static void action_on_client(ftp_server_t *server,
+    ftp_client_node_t *client, char *buff)
+{
+    int ret = run_ftp_server(client, buff);
+
+    if (ret == 0)
+        remove_client(&server->clients, client->connfd);
+}
+
 int server_clients_loop(ftp_server_t *server,
     ftp_client_node_t *new_client, char *buff)
 {
-    int ret = 0;
-
     if (FD_ISSET(server->sockfd, server->readfds)) {
         new_client = new_connection(&server->clients, server->sockfd, server);
         if (new_client == NULL)
@@ -48,9 +55,7 @@ int server_clients_loop(ftp_server_t *server,
     for (ftp_client_node_t *client = server->clients; client != NULL;
     client = client->next) {
         if (FD_ISSET(client->connfd, server->readfds)) {
-            ret = run_ftp_server(client, buff);
-            if (ret == 0)
-                remove_client(&server->clients, client->connfd);
+            action_on_client(server, client, buff);
         }
     }
     return 0;
