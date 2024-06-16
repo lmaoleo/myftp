@@ -76,7 +76,6 @@ int main(int ac, char **av)
     if (ac != 3)
         return 84;
     port = atoi(av[1]);
-    printf("Starting Port: %d\n", port);
     path = av[2];
     server = create_server(port, path);
     if (server == NULL)

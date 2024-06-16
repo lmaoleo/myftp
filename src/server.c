@@ -38,7 +38,6 @@ static void make_servaddr(ftp_server_t *server, int port)
     servaddr.sin_family = AF_INET;
     servaddr.sin_addr.s_addr = INADDR_ANY;
     servaddr.sin_port = htons(port);
-    printf("Port: %d\n", ntohs(servaddr.sin_port));
     server->servaddr = servaddr;
 }
 
@@ -61,7 +60,6 @@ ftp_server_t *create_server(int port, char *path)
 {
     ftp_server_t *server = malloc(sizeof(ftp_server_t));
 
-    printf("Port: %d\n", port);
     if (port < 1024 || port > 65535)
         return NULL;
     if (server == NULL)
