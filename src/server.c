@@ -11,6 +11,7 @@
 #include <sys/socket.h>
 #include <sys/select.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 
 #include "myftp.h"
 #include "server.h"
@@ -19,7 +20,7 @@ static int make_sockfd(void)
 {
     int sockdf;
 
-    sockdf = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    sockdf = socket(AF_INET, SOCK_STREAM, 0);
     setsockopt(sockdf, SOL_SOCKET, SO_REUSEADDR, &(int){1}, sizeof(int));
     if (sockdf == -1) {
         printf("Socket creation failed...\n");
@@ -37,6 +38,7 @@ static void make_servaddr(ftp_server_t *server, int port)
     servaddr.sin_family = AF_INET;
     servaddr.sin_addr.s_addr = INADDR_ANY;
     servaddr.sin_port = htons(port);
+    printf("Port: %d\n", ntohs(servaddr.sin_port));
     server->servaddr = servaddr;
 }
 
@@ -59,6 +61,7 @@ ftp_server_t *create_server(int port, char *path)
 {
     ftp_server_t *server = malloc(sizeof(ftp_server_t));
 
+    printf("Port: %d\n", port);
     if (port < 1024 || port > 65535)
         return NULL;
     if (server == NULL)
