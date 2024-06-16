@@ -44,7 +44,7 @@ int run_ftp_server(ftp_client_node_t *client, char *buff)
         return 0;
     if (ret == 0)
         return 1;
-    return -1;
+    return ret;
 }
 
 int server_loop(ftp_server_t *server)

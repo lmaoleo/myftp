@@ -24,6 +24,9 @@ int exec_cmd(ftp_client_node_t *client, char *cmd)
     regex_result_t *regex = NULL;
     int ret = 0;
 
+    if (cmd == NULL || cmd[0] == '\0') {
+        return 1;
+    }
     for (int i = 0; reg_cmds[i].regex != NULL; i++) {
         regex = execute_regex(reg_cmds[i].regex, cmd);
         if (regex != NULL) {
